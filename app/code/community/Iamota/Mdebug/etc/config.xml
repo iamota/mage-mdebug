@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Iamota_Mdebug>
+            <version>0.1.0</version>
+        </Iamota_Mdebug>
+    </modules>
+    
+    <global>
+        <helpers>
+            <mdebug>
+                <class>Iamota_Mdebug_Helper</class>
+            </mdebug>
+        </helpers>
+     </global>
+</config>
+
