@@ -1,18 +1,15 @@
 <?php
 class Iamota_Mdebug_Helper_Data extends Mage_Core_Helper_Abstract
 {
-	public function log($msg,$file){
-		$file = $file?$file:"system.log";
+	public function log($msg,$file="mdebug.log"){
 		Mage::log($msg,null,$file);
     }
 
-    public function logBacktrace($msg,$file){
-    	$file = $file?$file:"system.log";
+    public function logBacktrace($msg,$file="mdebug_backtrace.log"){
     	Mage::log(Mage::app()->getRequest()->getPathInfo()." >> ".debug_backtrace()[3]['file']."::".debug_backtrace()[3]['function']." >> ".debug_backtrace()[2]['file']."::".debug_backtrace()[2]['function']." >> ".debug_backtrace()[1]['file']."::".debug_backtrace()[1]['function']." :: ".$msg."\n\n",null,$file);
     }
 
-    public function logQuote($file,$verbose=false){
-    	$file = $file?$file:"system.log";
+    public function logQuote($file="mdebug_quote.log",$verbose=false){
     	$quote = Mage::getModel('checkout/cart')->getQuote();
         $quote->collectTotals()->save();
         $totals = $quote->getTotals();
@@ -46,12 +43,10 @@ class Iamota_Mdebug_Helper_Data extends Mage_Core_Helper_Abstract
     	else{
     		$billingData = array(
     				"city"=>$billingAddress["city"],
-
     			);
 
     		$shippingData = array(
     				"city"=>$shippingAddress["city"],
-
     			);
     	}
 
@@ -62,7 +57,6 @@ class Iamota_Mdebug_Helper_Data extends Mage_Core_Helper_Abstract
             $quoteData["cart_item_".$itemCounter."_qty"] = $item->getQty();
             $quoteData["cart_item_".$itemCounter."_price"] = $item->getPrice();
         }
-
 
     	$appliedRuleIds = $quote->getAppliedRuleIds();
         $appliedRuleIds = explode(',', $appliedRuleIds);
@@ -82,7 +76,6 @@ class Iamota_Mdebug_Helper_Data extends Mage_Core_Helper_Abstract
     	$quoteData = array_merge($quoteData,$billingData);
     	$quoteData = array_merge($quoteData,$shippingData);
 
-
         Mage::log(" *** Mdebug Quote Debugger *** ",null,$file);
 
         foreach($quoteData as $key => $value){
@@ -90,7 +83,7 @@ class Iamota_Mdebug_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
-    public function logSalesRule($salesRule,$file){
+    public function logSalesRule($salesRule,$file="mdebug_salesrule.log"){
         Mage::log("Mdebug :: logSalesRule()",null,$file);
         Mage::log("Mdebug :: logSalesRule id=".$salesRule->getId(),null,$file);
         Mage::log("Mdebug :: logSalesRule name=".$salesRule->getName(),null,$file);
@@ -101,8 +94,14 @@ class Iamota_Mdebug_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::log("Mdebug :: logSalesRule discount qty=".$salesRule->getDiscountQty(),null,$file);
         Mage::log("Mdebug :: logSalesRule discount step=".$salesRule->getDiscountStep(),null,$file);
         Mage::log("Mdebug :: logSalesRule apply to shipping=".$salesRule->getApplyToShipping(),null,$file);
-
-
-
     }
+
+	public function logOrder($order,$file="mdebug_order.log",$verbose=false){
+		ob_start();
+		var_dump($order);
+		$result = ob_get_clean();
+
+		Mage::log("Mdebug :: logOrder()",null,$file);
+		Mage::log($result,null,$file);
+	}
 }
