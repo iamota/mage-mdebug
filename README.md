@@ -1,2 +1,2 @@
 # mage-mdebug
-A feature-rich layer for Magento logging and debugging
+A plugin for Magento logging and debugging checkout related objects
